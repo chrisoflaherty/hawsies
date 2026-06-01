@@ -1,0 +1,12 @@
+/Users/chrisoflaherty/source/Hawsies/src/BrisPP.Core/bin/Debug/net10.0/BrisPP.Core.deps.json
+/Users/chrisoflaherty/source/Hawsies/src/BrisPP.Core/bin/Debug/net10.0/BrisPP.Core.dll
+/Users/chrisoflaherty/source/Hawsies/src/BrisPP.Core/bin/Debug/net10.0/BrisPP.Core.pdb
+/Users/chrisoflaherty/source/Hawsies/src/BrisPP.Core/obj/Debug/net10.0/BrisPP.Core.csproj.AssemblyReference.cache
+/Users/chrisoflaherty/source/Hawsies/src/BrisPP.Core/obj/Debug/net10.0/BrisPP.Core.GeneratedMSBuildEditorConfig.editorconfig
+/Users/chrisoflaherty/source/Hawsies/src/BrisPP.Core/obj/Debug/net10.0/BrisPP.Core.AssemblyInfoInputs.cache
+/Users/chrisoflaherty/source/Hawsies/src/BrisPP.Core/obj/Debug/net10.0/BrisPP.Core.AssemblyInfo.cs
+/Users/chrisoflaherty/source/Hawsies/src/BrisPP.Core/obj/Debug/net10.0/BrisPP.Core.csproj.CoreCompileInputs.cache
+/Users/chrisoflaherty/source/Hawsies/src/BrisPP.Core/obj/Debug/net10.0/BrisPP.Core.dll
+/Users/chrisoflaherty/source/Hawsies/src/BrisPP.Core/obj/Debug/net10.0/refint/BrisPP.Core.dll
+/Users/chrisoflaherty/source/Hawsies/src/BrisPP.Core/obj/Debug/net10.0/BrisPP.Core.pdb
+/Users/chrisoflaherty/source/Hawsies/src/BrisPP.Core/obj/Debug/net10.0/ref/BrisPP.Core.dll

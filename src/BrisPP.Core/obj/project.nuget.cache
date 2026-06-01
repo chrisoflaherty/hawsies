@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "dgSpecHash": "w5p7EfoOJiQ=",
+  "success": true,
+  "projectFilePath": "/Users/chrisoflaherty/source/Hawsies/src/BrisPP.Core/BrisPP.Core.csproj",
+  "expectedPackageFiles": [
+    "/Users/chrisoflaherty/.nuget/packages/uglytoad.pdfpig/1.7.0-custom-5/uglytoad.pdfpig.1.7.0-custom-5.nupkg.sha512",
+    "/Users/chrisoflaherty/.nuget/packages/uglytoad.pdfpig.core/1.7.0-custom-5/uglytoad.pdfpig.core.1.7.0-custom-5.nupkg.sha512",
+    "/Users/chrisoflaherty/.nuget/packages/uglytoad.pdfpig.fonts/1.7.0-custom-5/uglytoad.pdfpig.fonts.1.7.0-custom-5.nupkg.sha512",
+    "/Users/chrisoflaherty/.nuget/packages/uglytoad.pdfpig.tokenization/1.7.0-custom-5/uglytoad.pdfpig.tokenization.1.7.0-custom-5.nupkg.sha512",
+    "/Users/chrisoflaherty/.nuget/packages/uglytoad.pdfpig.tokens/1.7.0-custom-5/uglytoad.pdfpig.tokens.1.7.0-custom-5.nupkg.sha512"
+  ],
+  "logs": []
+}

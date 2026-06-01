@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/BrisPP.Cli/BrisPP.Cli.csproj" />
+    <Project Path="src/BrisPP.Core/BrisPP.Core.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/BrisPP.Tests/BrisPP.Tests.csproj" />
+  </Folder>
+</Solution>
