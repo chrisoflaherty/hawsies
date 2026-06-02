@@ -110,6 +110,67 @@ public class RaceCardParserTests
     }
 
     [Fact]
+    public void Parse_reads_sale_history_and_claiming_price()
+    {
+        if (_sample.Pages is null) return; // sample PDF not present
+
+        var card = RaceCardParser.Parse(_sample.Pages);
+
+        // Sale tag in place of the foal-month paren: "Ch. g. 3 OBSAPR 2025 $325k".
+        var woods = card.Races[1].Horses[0];
+        Assert.Equal("Out of the Woods", woods.Name);
+        Assert.Equal("OBSAPR", woods.SaleVenue);
+        Assert.Equal(2025, woods.SaleYear);
+        Assert.Equal(325_000, woods.SalePrice);   // "$325k" scales to whole dollars
+        Assert.Equal("OBSAPR 2025 $325k", woods.SaleRaw);
+        Assert.Null(woods.ClaimingPrice);
+        Assert.Null(woods.FoalMonth);
+
+        // Claiming-price prefix and a sale tag coexist on the same row:
+        // "$80,000 Dkbbr. g. 6 KEESEP 2021 $360k".
+        var arro = card.Races[2].Horses.Single(h => h.ProgramNumber == 1);
+        Assert.Equal(80_000, arro.ClaimingPrice);
+        Assert.Equal("KEESEP", arro.SaleVenue);
+        Assert.Equal(2021, arro.SaleYear);
+        Assert.Equal(360_000, arro.SalePrice);
+
+        // A fractional "k" price keeps its precision: "$190.4k" -> 190,400.
+        var portfolio = card.Races[6].Horses.Single(h => h.ProgramNumber == 3);
+        Assert.Equal(190_400, portfolio.SalePrice);
+        Assert.Equal("TATOCT", portfolio.SaleVenue);
+
+        // A foal-month horse (no sale history) leaves the sale fields untouched.
+        var bhatia = card.Races[0].Horses[0];
+        Assert.Equal("Feb", bhatia.FoalMonth);
+        Assert.Null(bhatia.SaleVenue);
+        Assert.Null(bhatia.SalePrice);
+        Assert.Null(bhatia.ClaimingPrice);
+    }
+
+    [Fact]
+    public void Parse_leaves_prime_power_null_only_for_the_shippers_absent_in_source()
+    {
+        if (_sample.Pages is null) return; // sample PDF not present
+
+        var card = RaceCardParser.Parse(_sample.Pages);
+        var missing = card.Races
+            .SelectMany(r => r.Horses.Select(h => (r.Number, h.ProgramNumber, h.Name, h.PrimePower)))
+            .Where(x => x.PrimePower is null)
+            .Select(x => (x.Number, x.ProgramNumber))
+            .ToHashSet();
+
+        // These six foreign/JRA shippers carry no "Prime Power" figure in the
+        // BRIS PDF at all (confirmed at the glyph level — not clipped, not
+        // scattered), so the parser leaves PrimePower null rather than invent one.
+        // Every other horse must resolve it.
+        var expected = new HashSet<(int, int)>
+        {
+            (10, 8), (10, 10), (11, 10), (12, 7), (12, 10), (12, 17),
+        };
+        Assert.Equal(expected, missing);
+    }
+
+    [Fact]
     public void Parse_populates_core_connections_for_every_horse()
     {
         if (_sample.Pages is null) return; // sample PDF not present

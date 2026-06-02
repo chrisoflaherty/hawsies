@@ -15,7 +15,12 @@ public sealed class Horse
     public string? Sex { get; set; }              // c/f/g/h/m/r
     public int? Age { get; set; }
     public string? FoalMonth { get; set; }        // e.g. "Feb"
-    public SaleInfo? Sale { get; set; }
+
+    public long? ClaimingPrice { get; set; }       // entered-to-be-claimed tag, e.g. "$80,000"
+    public string? SaleVenue { get; set; }         // auction code, e.g. "KEESEP"
+    public int? SaleYear { get; set; }
+    public long? SalePrice { get; set; }           // in dollars; "$450k" -> 450000
+    public string? SaleRaw { get; set; }           // verbatim sale block, e.g. "KEESEP 2024 $450k"
 
     public decimal? PrimePower { get; set; }
     public string? PrimePowerRank { get; set; }   // e.g. "8th"
@@ -50,8 +55,6 @@ public sealed class Horse
     /// <summary>Verbatim identity-zone rows, preserved so the decode is auditable.</summary>
     public List<string> IdentityRaw { get; set; } = new();
 }
-
-public sealed record SaleInfo(string Sale, int? Year, string? PriceText, long? Price);
 
 public sealed class Owner
 {

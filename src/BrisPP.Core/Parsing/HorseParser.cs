@@ -131,6 +131,7 @@ public static partial class HorseParser
                 // Foal month only shows for horses without sale history; others
                 // carry a sale tag ("OBSAPR 2025 $325k") in its place.
                 if (c.Groups[4].Success) horse.FoalMonth = c.Groups[4].Value;
+                ApplyIdentityPrices(row, horse);
             }
         }
 
@@ -214,6 +215,33 @@ public static partial class HorseParser
         }
     }
 
+    // Both prices live on the color row. The claiming price prefixes it when the
+    // horse is entered to be claimed; the sale block ("KEESEP 2024 $450k") sits
+    // after the age in place of the foal-month paren.
+    private static void ApplyIdentityPrices(string row, Horse horse)
+    {
+        var claim = ClaimingRx().Match(row);
+        if (claim.Success) horse.ClaimingPrice = ParseHelpers.Money(claim.Groups[1].Value);
+
+        var sale = SaleRx().Match(row);
+        if (sale.Success)
+        {
+            horse.SaleRaw = sale.Value.Trim();
+            horse.SaleVenue = sale.Groups[1].Value;
+            horse.SaleYear = int.Parse(sale.Groups[2].Value);
+            horse.SalePrice = SalePriceDollars(sale.Groups[3].Value);
+        }
+    }
+
+    // Sale prices are quoted in thousands with a "k" suffix ("$450k", "$190.4k");
+    // scale to whole dollars. A bare amount (no "k") is taken at face value.
+    private static long? SalePriceDollars(string token)
+    {
+        if (ParseHelpers.Decimal(token) is not { } value) return null;
+        var scale = token.Contains('k', StringComparison.OrdinalIgnoreCase) ? 1000 : 1;
+        return (long)Math.Round(value * scale);
+    }
+
     private static T BuildConnection<T>(Match m) where T : Connection, new()
     {
         var c = new T { Name = m.Groups[1].Value.Trim() };
@@ -279,6 +307,16 @@ public static partial class HorseParser
     // leaving "Ch. . 8" — we still want the color and age.
     [GeneratedRegex(@"(?:^|\s)([A-Za-z][A-Za-z/]*)\.\s*([cfghmrCFGHMR])?\.\s*(\d+)\b(?:\s*\(([A-Za-z]{3})\))?")]
     private static partial Regex ColorRx();
+
+    // A leading claiming price ("$80,000 Dkbbr. g. 6 ...") on the color row.
+    [GeneratedRegex(@"^\s*\$\s*([\d,]+)\b")]
+    private static partial Regex ClaimingRx();
+
+    // Sale block "<AUCTION> <year> $<price>[k]" after the age. Auction codes run
+    // 5-6 caps in this card; allow 3-7 for safety. The year+$ anchor keeps it
+    // from matching the color token or an all-caps name fragment.
+    [GeneratedRegex(@"\b([A-Z]{3,7})\s+(20\d{2})\s+(\$[\d.,]+[kK]?)")]
+    private static partial Regex SaleRx();
 
     // The rank ordinal ("6th") is parenthesized for most horses but bare for
     // some ("157.0 5th"), so the parentheses are optional.
